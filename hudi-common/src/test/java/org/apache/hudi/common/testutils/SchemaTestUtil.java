@@ -108,6 +108,7 @@ public final class SchemaTestUtil {
       p.put(HoodieRecord.RECORD_KEY_METADATA_FIELD, UUID.randomUUID().toString());
       p.put(HoodieRecord.PARTITION_PATH_METADATA_FIELD, "0000/00/00");
       p.put(HoodieRecord.COMMIT_TIME_METADATA_FIELD, instantTime);
+      return p;
     }).collect(Collectors.toList());
   }
 

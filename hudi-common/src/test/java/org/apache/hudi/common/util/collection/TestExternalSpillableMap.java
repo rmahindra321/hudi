@@ -485,10 +485,9 @@ public class TestExternalSpillableMap extends HoodieCommonTestHarness {
           }
         }
 
-        System.out.println("THREAD IDX " + threadIdx +"LATENCY STATS NUM RECORDS " + stressCnt + " GET MEM " + getMemoryLatencyAvg/totalGetMemoryCnt + " GET DISK " + getDiskLatencyAvg/totalGetDiskCnt + " PUT MEM " + putMemoryLatencyAvg/totalPutMemoryCnt + " PUT DISK " + putDiskLatencyAvg/totalPutDiskCnt);
+        System.out.println("THREAD IDX " + threadIdx + "LATENCY STATS NUM RECORDS " + stressCnt + " GET MEM " + getMemoryLatencyAvg/totalGetMemoryCnt + " GET DISK " + getDiskLatencyAvg/totalGetDiskCnt + " PUT MEM " + putMemoryLatencyAvg/totalPutMemoryCnt + " PUT DISK " + putDiskLatencyAvg/totalPutDiskCnt);
         latch.countDown();
       }
     }
   }
-}
 }
