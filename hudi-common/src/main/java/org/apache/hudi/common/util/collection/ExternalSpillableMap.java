@@ -237,6 +237,14 @@ public class ExternalSpillableMap<T extends Serializable, R extends Serializable
     return keySet;
   }
 
+  public boolean inMemoryContainsKey(Object key) {
+    return inMemoryMap.containsKey(key);
+  }
+
+  public boolean inDiskContainsKey(Object key) {
+    return getDiskBasedMap().containsKey(key);
+  }
+
   @Override
   public Collection<R> values() {
     if (getDiskBasedMap().isEmpty()) {
