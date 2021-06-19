@@ -318,7 +318,7 @@ public class TestExternalSpillableMap extends HoodieCommonTestHarness {
   public void testLargeInsertUpsert() throws IOException, URISyntaxException {
 
     final int numRecordsInFile = 3200;
-    final int numLoopFile = 1500; // 1500 for rockDB and 500 for diskBasedMap
+    final int numLoopFile = 1000; // 1500 for rockDB and 500 for diskBasedMap
     final int numTotalRecords = numRecordsInFile * numLoopFile;
     Schema schema = HoodieAvroUtils.addMetadataFields(SchemaTestUtil.getSimpleSchema());
 
@@ -326,11 +326,11 @@ public class TestExternalSpillableMap extends HoodieCommonTestHarness {
         new ExternalSpillableMap<>(500000000L, basePath,
             new DefaultSizeEstimator(), new HoodieRecordSizeEstimator(schema)); // 16B
 
-    List<String > overallKeys = new ArrayList<>();
+    List<String> overallKeys = new ArrayList<>();
     List<IndexedRecord> fixedRecordPayload = SchemaTestUtil.generateTestRecords(0, numRecordsInFile);
     String instantTime = HoodieActiveTimeline.createNewInstantTime();
     List<IndexedRecord> subRecords;
-    for (int inputCnt = 0; inputCnt <= numLoopFile; inputCnt++) {
+    for (int inputCnt = 0; inputCnt < numLoopFile; inputCnt++) {
       // insert a bunch of externalSpillableMap so that values spill to disk too
       if (inputCnt%50 == 0) {
         instantTime = HoodieActiveTimeline.createNewInstantTime();
