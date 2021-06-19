@@ -38,6 +38,8 @@ import org.apache.avro.generic.IndexedRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -66,9 +68,10 @@ public class TestDiskBasedMap extends HoodieCommonTestHarness {
     initPath();
   }
 
-  @Test
-  public void testSimpleInsert() throws IOException, URISyntaxException {
-    DiskBasedMap records = new DiskBasedMap<>(basePath);
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void testSimpleInsert(boolean isCompressionEnabled) throws IOException, URISyntaxException {
+    DiskBasedMap records = new DiskBasedMap<>(basePath, isCompressionEnabled);
     List<IndexedRecord> iRecords = SchemaTestUtil.generateHoodieTestRecords(0, 100);
     ((GenericRecord) iRecords.get(0)).get(HoodieRecord.COMMIT_TIME_METADATA_FIELD).toString();
     List<String> recordKeys = SpillableMapTestUtils.upsertRecords(iRecords, records);

@@ -329,7 +329,7 @@ public class TestExternalSpillableMap extends HoodieCommonTestHarness {
   public void testLargeInsertUpsert() throws IOException, URISyntaxException {
 
     final int numRecordsInFile = 3200;
-    final int numLoopFile = 1000; // 1500 for rockDB and 500 for diskBasedMap
+    final int numLoopFile = 1500; // 1500 for rockDB and 500 for diskBasedMap
     final int numTotalRecords = numRecordsInFile * numLoopFile;
     Schema schema = HoodieAvroUtils.addMetadataFields(SchemaTestUtil.getSimpleSchema());
 
@@ -357,12 +357,12 @@ public class TestExternalSpillableMap extends HoodieCommonTestHarness {
       }
     }
 
-    /*new StressTestSpillableMap(
+    new StressTestSpillableMap(
             1,
-            100000,//250000,
+            10000,//250000,
             overallKeys,
             numTotalRecords,
-            externalSpillableMap).start();*/
+            externalSpillableMap).start();
 
     /*new StressTestSpillableMap(
             5,

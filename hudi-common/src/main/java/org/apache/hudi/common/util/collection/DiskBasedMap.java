@@ -34,9 +34,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashSet;
@@ -269,34 +271,33 @@ public final class DiskBasedMap<T extends Serializable, R extends Serializable> 
 
   private byte[] compressBytes(final byte [] value) throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
-    DeflaterOutputStream dos = new DeflaterOutputStream(baos, deflater, true);
+    //Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
+    DeflaterOutputStream dos = new DeflaterOutputStream(baos);//, deflater, true);
     try {
-      System.out.println("WNI Compress");
       dos.write(value);
-    } catch (IOException ignore) {
-      System.out.println("COMPRESSION ERROR " + ignore.getMessage());
     } finally {
-      dos.flush();
+      //dos.flush();
       dos.close();
       // Its important to call this.
       // Deflater takes off-heap native memory and does not release until GC kicks in
-      deflater.end();
+      //deflater.end();
     }
     return baos.toByteArray();
   }
 
-  private static byte[] decompressBytes(final byte[] value) throws IOException {
-    InflaterInputStream iis = new InflaterInputStream(new ByteArrayInputStream(value));
-    byte[] output = new byte[128 * 1024];
-    int bytesRead = 0;
-    while (iis.available() > 0) {
-      int len = iis.read(output, bytesRead, 128 * 1024);
-      if (len >= 0) {
-        bytesRead += len;
+  private static byte[] decompressBytes(final byte[] bytes) throws IOException {
+    InputStream in = new InflaterInputStream(new ByteArrayInputStream(bytes));
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try {
+      byte[] buffer = new byte[8192];
+      int len;
+      while ((len = in.read(buffer)) > 0) {
+        baos.write(buffer, 0, len);
       }
+      return baos.toByteArray();
+    } catch (IOException e) {
+      throw new HoodieIOException("IOException while decompressing bytes", e);
     }
-    return output;
   }
 
   private void cleanup() {

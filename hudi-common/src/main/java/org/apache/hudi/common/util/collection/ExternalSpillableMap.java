@@ -105,18 +105,15 @@ public class ExternalSpillableMap<T extends Serializable, R extends Serializable
       synchronized (this) {
         if (null == diskBasedMap) {
           try {
-            System.out.println("WNI " + diskMapType.name());
             switch (diskMapType) {
               case ROCK_DB:
                 diskBasedMap = new SpillableRocksDBBasedMap<>(baseFilePath);
                 break;
               case COMPRESSED_DISK_MAP:
-                System.out.println("YES");
                 diskBasedMap = new DiskBasedMap<>(baseFilePath, true);
                 break;
-              case DISK_MAP: System.out.println("OH NO");
+              case DISK_MAP:
               default:
-                System.out.println("WAT??");
                 diskBasedMap = new DiskBasedMap<>(baseFilePath);
             }
           } catch (IOException e) {
