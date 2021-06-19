@@ -91,7 +91,7 @@ public class LazyFileIterable<T, R> implements Iterable<R> {
         throw new IllegalStateException("next() called on EOF'ed stream. File :" + filePath);
       }
       Map.Entry<T, DiskBasedMap.ValueMetadata> entry = this.metadataIterator.next();
-      return DiskBasedMap.get(entry.getValue(), readOnlyFileHandle);
+      return DiskBasedMap.get(entry.getValue(), readOnlyFileHandle, false);
     }
 
     @Override
